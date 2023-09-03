@@ -1,0 +1,30 @@
+/* Custom scrollbar styles */
+::-webkit-scrollbar {
+    width: 8px;
+    background-color: #333;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background-color: #888;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+  }
+  
+  @keyframes shine {
+    0% {
+      opacity: 0;
+      text-shadow: 0 0 5px #FFD700, 0 0 10px #FFD700, 0 0 15px #FF8C00, 0 0 20px #FF8C00, 0 0 25px #FF8C00, 0 0 30px #FF8C00, 0 0 35px #FF8C00;
+    }
+    100% {
+      opacity: 1;
+      text-shadow: none;
+    }
+  }
+  
+  
+  .shine-effect {
+    animation: shine 3s forwards;
+  }
+  
