@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { TextField } from '@mui/material';
 
 function TextBox({ prompt, onPromptChange, fetchResponse }) {
   const [text, setText] = useState('');
@@ -20,49 +19,16 @@ function TextBox({ prompt, onPromptChange, fetchResponse }) {
 
   return (
     <div
-      style={{
-        position: 'fixed',
-        bottom: '5%',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        width: '80%',
-      }}
+      className='flex justify-center w-full '
     >
-      <p style={{ color: 'grey' }}>{prompt}</p>
-      <TextField
-        sx={{
-          width: '100%',
-          '& .MuiOutlinedInput-root': {
-            background: 'black',
-            '& fieldset': {
-              borderColor: 'grey',
-            },
-            '&:hover fieldset': {
-              borderColor: 'grey',
-            },
-            '&.Mui-focused fieldset': {
-              borderColor: 'grey',
-            },
-            '& input': {
-              color: 'grey',
-            },
-          },
-          '& .MuiFormLabel-root': {
-            color: 'grey',
-          },
-        }}
-        label="Enter Text"
-        variant="outlined"
+
+      <input
+        type="text"
         value={text}
+        className='w-1/2 text-xl h-9 border-solid border-2 border-black'
         onChange={handleTextChange}
-        onKeyPress={handleKeyPress}
-        InputProps={{
-          sx: {
-            '& .MuiOutlinedInput-notchedOutline': {
-              borderColor: 'grey',
-            },
-          },
-        }}></TextField> 
+        onKeyDown={handleKeyPress}
+        ></input> 
     </div>
   );
 }

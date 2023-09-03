@@ -1,74 +1,61 @@
 import React, { useState } from 'react';
-import { Paper, Typography, Button } from '@mui/material';
-
-const questBoxStyle = {
-  padding: '16px',
-  backgroundColor: 'rgba(0, 0, 0, 0.8)',
-  borderRadius: '8px',
-  boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
-  marginBottom: '16px',
-};
-
-const headerStyle = {
-  marginBottom: '8px',
-  color: '#fff',
-};
-
-const textStyle = {
-  marginBottom: '4px',
-  color: '#fff',
-};
 
 export const QuestBox = ({ name, questName, requirements, reward, onQuestAccept }) => {
   const [questDecision, setQuestDecision] = useState(null);
+  const [isVisible, setIsVisible] = useState(true);
 
   const handleQuestAccept = () => {
     onQuestAccept();
-    setQuestDecision('accepted'); // Pass the second argument as `true` to indicate quest acceptance
+    setQuestDecision('accepted');
+    setTimeout(() => {
+    setIsVisible(false);
+  },1500) 
   };
 
   const handleQuestDecline = () => {
     setQuestDecision('declined');
   };
 
+  if(!isVisible) return null;
+
   return (
-    <Paper style={questBoxStyle}>
+    <div className="w-2/3 mx-auto bg-black bg-opacity-80 p-4 rounded-lg shadow-md mb-4">
       {questDecision === 'accepted' ? (
         <>
-          <Typography variant="h5" style={headerStyle}>
+          <div className="text-white text-lg mb-2 font-bold">
             Mission Accepted!
-          </Typography>
-          <Typography variant="body1" style={textStyle}>
+          </div>
+          <div className="text-white text-base">
             You have accepted the mission "{questName}"!
-          </Typography>
+          </div>
         </>
       ) : (
         <>
-          <Typography variant="h5" style={headerStyle}>
+          <div className="text-white text-lg mb-2 font-bold">
             Mission Details
-          </Typography>
-          <Typography variant="body1" style={textStyle}>
+          </div>
+          <div className="text-white text-base mb-2">
             Name: {name}
-          </Typography>
-          <Typography variant="body1" style={textStyle}>
+          </div>
+          <div className="text-white text-base mb-2">
             Mission Name: {questName}
-          </Typography>
-          <Typography variant="body1" style={textStyle}>
+          </div>
+          <div className="text-white text-base mb-2">
             Requirements: {requirements}
-          </Typography>
-          <Typography variant="body1" style={textStyle}>
+          </div>
+          <div className="text-white text-base mb-4">
             Reward: {reward}
-          </Typography>
-          <div style={{ marginTop: '16px', display: 'flex', justifyContent: 'space-between' }}>
-            <Button variant="contained" onClick={handleQuestAccept} color="primary">
+          </div>
+          <div className="mt-4 flex justify-between">
+            <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 active:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" onClick={handleQuestAccept}>
               Accept
-            </Button>
-            <Button variant="contained" onClick={handleQuestDecline} color="secondary">
+            </button>
+            <button className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 active:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50" onClick={handleQuestDecline}>
               Decline
-            </Button>
+            </button>
           </div>
         </>
       )}
-    </Paper>
+    </div>
   );
 };
