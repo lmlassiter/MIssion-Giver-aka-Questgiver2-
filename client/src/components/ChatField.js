@@ -1,144 +1,90 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Paper, Typography } from '@mui/material';
-import './chatfield.css';
 import CharacterTyping from './CharacterTyping';
 import idleGif from "../NPC/idle.gif";
 import talkingGif from "../NPC/talking.gif";
+import userTalkingGif from "../NPC/user-talking.gif";
+import userIdleGif from "../NPC/user-idle.gif";
 
 function ChatField({ chat, characterName }) {
   const [isTyping, setIsTyping] = useState(false);
   const [currentRole, setCurrentRole] = useState(null);
-  let [npcText, setNpcText] = useState("...");
-  let [userText, setUserText] = useState("");
+  const [text, setText] = useState("...");
   const [ran, setRan] = useState(-1);
+  const [originalCharacterName, setOriginalCharacterName] = useState(characterName);
+  const [lastSpokenRole, setLastSpokenRole] = useState(null);
+
 
   const startTypingAnimation = (role) => {
     setIsTyping(true);
     setCurrentRole(role);
+
+    if (role === 'npc') {
+      setOriginalCharacterName(characterName);
+    }else if(role === 'user'){
+      setOriginalCharacterName("You")
+    }
   };
 
   const endTypingAnimation = () => {
     setIsTyping(false);
+    setLastSpokenRole(currentRole);
     setCurrentRole(null);
   };
 
-  useEffect(() =>{
-    setRan(ran+1);
-    if(ran>=0){
+  useEffect(() => {
+    setRan(ran + 1);
+    if (ran >= 0) {
       setCurrentRole(chat[ran].role);
       console.log(chat[ran].role);
-      if(chat[ran].role === "user"){
-        setUserText(chat[ran].content);
-      } else if(chat[ran].role === "npc"){
-        setNpcText(chat[ran].content);
-      }
+      setText(chat[ran].content);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[chat]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chat]);
 
-  return (
-    <div>
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'flex-start',
-          flexDirection: 'row',
-          position: 'absolute',
-          top: '10px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: '80%',
-          height: 'max-content',
-          borderColor: "#A0A0A0",
-          borderStyle: "solid",
-          padding: "20px",
-          borderRadius: "15px"
-        }}
-      >
+ return (
+    <div className="flex justify-center">
+      <div className="w-1/2 p-4 bg-white border border-gray-500 rounded-lg shadow-lg mt-10 flex">
         {/* The GIF */}
-        {isTyping && currentRole !== 'user' ? (
-          <img src={talkingGif} alt="Talking NPC" style={{marginTop: "30px", width: '200px', height: 'auto', opacity: "100%" }} />
-        ) : (
-          <img src={idleGif} alt="Idle NPC" style={{marginTop: "30px", width: '200px', height: 'auto', opacity: "100%" }} />
-        )}
-  
+        <div className="w-1/3">
+{isTyping && currentRole === 'npc' ? (
+    <img src={talkingGif} alt="Talking NPC" className="w-48 h-auto opacity-100" />
+) : isTyping && currentRole === 'user' ? (
+    <img src={userTalkingGif} alt="Talking User" className="w-48 h-auto opacity-100" />
+) : !isTyping && lastSpokenRole === 'npc' ? (
+    <img src={idleGif} alt="Idle NPC" className="w-48 h-auto opacity-100" />
+) : !isTyping && lastSpokenRole === 'user' ? (
+    <img src={userIdleGif} alt="Idle User" className="w-48 h-auto opacity-100" />
+) : (
+    <img src={idleGif} alt="Idle NPC" className="w-48 h-auto opacity-100" />
+)}
+
+      </div>
+
         {/* The Name & Message Content */}
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'flex-start',
-            marginLeft: '20px',
-            flexGrow: 1,
-          }}
-        >
-          <Typography
-            variant="h5"
-            color="text.primary"
-            className={characterName && characterName !== 'Name: Unknown' ? 'shine-effect' : ''}
-            sx={{
-              fontFamily: "'Cinzel', serif",
-              textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
-              letterSpacing: '1px',
-              fontWeight: 'bold',
-              marginBottom: '20px'
-            }}
+        <div className="w-2/3 p-4">
+          <div
+            className={`text-xl font-semibold ${
+              currentRole === 'user' ? 'shine-effect' : ''
+            }`}
           >
-            {characterName || "Name: Unknown"}
-          </Typography>
-          
-          <Typography variant="body1" color="text.primary">
-          {currentRole === "npc" ? <CharacterTyping text={npcText} onAnimationStart={() => startTypingAnimation(currentRole, npcText)} onAnimationEnd={endTypingAnimation} /> : npcText}
-          </Typography>
+            {currentRole === 'user' ? 'You' : originalCharacterName}
+          </div>
 
-
-        </Box>
-      </Box>
-<Box
-      sx={{
-        width: '80%',
-        padding: '16px',
-        backgroundColor: 'background.paper',
-        borderRadius: '8px',
-        margin: '0 auto',
-        overflowY: 'auto',
-        maxHeight: 'calc(100vh - 250px)',
-        marginTop: '300px',
-      }}
-    >
-</Box>
-
-<Box
-        sx={{
-          display: 'flex',
-          alignItems: 'flex-start',
-          flexDirection: 'column',
-          position: 'absolute',
-          bottom: '120px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-        width: '80%',
-          height: 'max-content',
-          borderColor: "#A0A0A0",
-          borderStyle: "solid",
-          padding: "20px",
-          borderRadius: "15px"
-        }}
-      >
-        <Paper elevation={3} sx={{
-          padding: '12px',
-          marginBottom: '16px',
-          width: '100%',
-          backgroundColor: 'rgba(0,0,0,0.5)',
-          color: 'text.primary',
-        }}>
-          <Typography variant="body1">
-          {currentRole === 'user' ? <CharacterTyping text={userText} onAnimationStart={() => startTypingAnimation(currentRole, userText)} onAnimationEnd={endTypingAnimation} /> : userText}
-          </Typography>
-        </Paper>
-      </Box>
-</div>
-);
+          <div className="text-lg mt-2">
+            {currentRole === "npc" || currentRole === 'user' ? (
+              <CharacterTyping
+                text={text}
+                onAnimationStart={() => startTypingAnimation(currentRole)}
+                onAnimationEnd={endTypingAnimation}
+              />
+            ) : (
+              text
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default ChatField;

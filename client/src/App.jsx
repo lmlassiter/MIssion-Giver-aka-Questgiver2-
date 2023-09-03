@@ -1,30 +1,21 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import PauseIcon from "@mui/icons-material/Pause";
 import TextBox from './components/TextBox';
 import ChatField from './components/ChatField';
 import audioFile from './assets/Now-We-Ride.mp3';
 import { QuestBox } from './components/QuestBox';
-
-// Create a custom dark theme
-const theme = createTheme({
-  palette: {
-    mode: 'dark',
-  },
-});
+import backgroundGif from './NPC/bg.gif'
+import "./styles.css"
 
 function App() {
   const [appStarted, setAppStarted] = useState(false);
   const [chat, setChat] = useState([]);
   const [error, setError] = useState(null);
   const [questGiven, setQuestGiven] = useState(false);
-  const [acceptedQuestName, setAcceptedQuestName] = useState(''); // New state variable
+  const [acceptedQuestName, setAcceptedQuestName] = useState('');
   const [acceptedQuest, setAcceptedQuest] = useState('');
   const [characterName, setCharacterName] = useState('');
-  const [questRequirements, setQuestRequirements] = useState(''); // New state variable for quest requirements
-  const [questReward, setQuestReward] = useState(''); // New state variable for quest reward
-
+  const [questRequirements, setQuestRequirements] = useState('');
+  const [questReward, setQuestReward] = useState('');
   const audioRef = useRef();
   const [isPlaying, setIsPlaying] = useState(false);
   
@@ -121,9 +112,9 @@ function App() {
         // Include a system message indicating quest acceptance and pass the quest information
         systemPrompt = {
           role: 'system',
-          content: `You are an NPC in a Skyrim-like game.
-           You just gave the User a quest. The user has accepted
-            it. This is the quest: ${prompt}. You can now thank them, 
+          content: `You are an NPC in a GTA-like game.
+           You just gave the User a Mission. The user has accepted
+            it. This is the Mission: ${prompt}. You can now thank them, 
             say goodbye, give a tip, etc. but STAY IN CHARACTER. No more than 1-3 sentences`,
         };
         
@@ -132,12 +123,12 @@ function App() {
         systemPrompt = {
           role: 'system',
           content: `
-            You are a male NPC in a GTA-like game. Your goal is to give the user a 
+            You are a male Gangster NPC in a GTA-like game. Your goal is to give the user a 
             mission.
             Follow this format EXACTLY:
-            Name: (creative name)
+            Name: (You come up with a name)
             Mission Name: (name)
-            Requirements: (one-sentence quest requirement)
+            Requirements: (one-sentence quest description)
             Reward: (Reasonable XP Amount, and occasionally an Item)
             
             then, in the response, answer the user prompt with their name
@@ -149,7 +140,7 @@ function App() {
             sentences. You are asking if they will do it, they have not agreed yet.
           `,
         };
-        addMessageToChat('user', 'You: ' + prompt);
+        addMessageToChat('user', prompt);
         conversations.push({ role: 'user', content: prompt });
         
       }
@@ -179,59 +170,55 @@ function App() {
   
   
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
+     <div className="flex flex-col h-screen" style={{ backgroundImage: `url(${backgroundGif})`, backgroundRepeat: 'no-repeat', backgroundSize: '80% 80%', backgroundPosition: 'center' }}>
       {!appStarted ? (
-        <div style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100vh',
-          flexDirection: 'column',
-        }}>
+        <div className="flex justify-center items-center flex-1">
           <button
-            style={{
-              fontSize: '20px',
-              padding: '20px',
-              cursor: 'pointer',
-              border: 'none',
-              borderRadius: '10px',
-            }}
+            className="text-3xl bg-white border-8 px-5 py-4 cursor-pointer border-black rounded"
             onClick={startApp}
           >
-            <PlayArrowIcon/>
+            Talk?
           </button>
         </div>
       ) : (
         <>
-          <div>
-            <button onClick={() => setIsPlaying(!isPlaying)}>
-              {isPlaying ? <PauseIcon/> : <PlayArrowIcon/>}
+          <div className="flex flex-col h-full px-4 py-6">
+            <button className="mb-4" onClick={() => setIsPlaying(!isPlaying)}>
+              {isPlaying ? "Pause" : "Play"}
             </button>
-            {error ? <p>Error: {error}</p> : null}
-            <ChatField chat={chat} characterName={characterName} />
-            <TextBox
-              onPromptChange={handlePromptChange}
-              fetchResponse={fetchResponse}
-            />
-          {questGiven && acceptedQuestName ? (
+  
+            {error ? <p className="mb-4">Error: {error}</p> : null}
+  
+            <div className="flex flex-col flex-1 justify-between">
+            <div>
+            {questGiven && acceptedQuestName ? (
               <QuestBox
                 name={characterName}
                 questName={acceptedQuestName}
                 requirements={questRequirements}
                 reward={questReward}
                 onQuestAccept={handleQuestAccept}
+                className="mb-4"
               />
-          ) : null}
+            ) : null}
+            </div>
+              <div> 
+              <ChatField chat={chat} characterName={characterName} />
+              <TextBox
+                onPromptChange={handlePromptChange}
+                fetchResponse={fetchResponse}
+              />
+            </div>
+            </div>
           </div>
+  
           <audio ref={audioRef} loop>
             <source src={audioFile} type="audio/mpeg" />
           </audio>
         </>
       )}
-  </ThemeProvider>
+    </div>
   );
-  
-}
+            }
 
 export default App;
