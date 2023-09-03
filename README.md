@@ -1,4 +1,4 @@
-# AI Quest Giver
+#BATTLE GODS 3
 AI gives a quest.
 
 The prompt fails are relatively low, but possible. Reload or ask again.
