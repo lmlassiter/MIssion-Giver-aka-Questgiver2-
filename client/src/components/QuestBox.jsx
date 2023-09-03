@@ -19,7 +19,7 @@ export const QuestBox = ({ name, questName, requirements, reward, onQuestAccept 
   if(!isVisible) return null;
 
   return (
-    <div className="w-2/3 mx-auto bg-black bg-opacity-80 p-4 rounded-lg shadow-md mb-4">
+    <div className="w-1/3 mx-auto bg-black bg-opacity-80 p-4 rounded-lg shadow-md mb-4">
       {questDecision === 'accepted' ? (
         <>
           <div className="text-white text-lg mb-2 font-bold">
