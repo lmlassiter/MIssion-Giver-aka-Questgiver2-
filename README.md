@@ -5,7 +5,7 @@ AI gives a quest.
 
 The prompt fails are relatively low, but possible. Reload or ask again.
 
-<img src="https://github.com/lmlassiter/metafarce/blob/main/Quest_Giver_Demo.gif" alt="Demo NPC" width="600">
+<img src="https://github.com/lmlassiter/Battle-Gods-3/blob/main/Quest_Giver_Demo.gif" alt="Demo NPC" width="600">
 
 FE: React, Tailwindcss
 
