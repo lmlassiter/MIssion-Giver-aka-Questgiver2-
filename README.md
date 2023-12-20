@@ -1,5 +1,5 @@
 
-AI gives a quest.
+AI gives a mission. This is a "GTA" inspired version of the quest giver.
 
 This was made before you could get the JSON output from the GPT API, so the mission data may be messed up.
 
